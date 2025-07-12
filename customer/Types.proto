@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package petclinic.customers;
+
+option go_package = "petclinic/grpcgateway/gen/proto/customer";
+option java_package = "org.springframework.samples.petclinic.customers.grpc.gen.customer.types";
+option java_multiple_files = true;
+option java_outer_classname = "CustomerTypesProto";
+
+message Pet {
+  int32 id = 1;
+  string name = 2;
+  string birth_date = 3;
+  PetType type = 4;
+  Owner owner = 5;
+}
+
+message PetType {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Owner {
+  int32 id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string address = 4;
+  string city = 5;
+  string telephone = 6;
+  repeated Pet pets = 7;
+}
+
+message CreateOwnerRequest {
+  string first_name = 1;
+  string last_name = 2;
+  string address = 3;
+  string city = 4;
+  string telephone = 5;
+}
+
+message UpdateOwnerRequest {
+  int32 owner_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string address = 4;
+  string city = 5;
+  string telephone = 6;
+}
+
+message GetOwnerRequest {
+  int32 owner_id = 1;
+}
+
+message CreatePetRequest {
+  int32 owner_id = 1;
+  string birth_date = 2;
+  string name = 3;
+  int32 type_id = 4;
+}
+
+message UpdatePetRequest {
+  int32 pet_id = 1;
+  string birth_date = 2;
+  string name = 3;
+  int32 type_id = 4;
+}
+
+message GetPetRequest {
+  int32 pet_id = 1;
+}
+
+message CreateOwnerResponse {
+  Owner owner = 1;
+  bool created = 2;
+}
+
+message GetOwnerResponse {
+  Owner owner = 1;
+  bool found = 2;
+}
+
+message GetOwnersResponse {
+  repeated Owner owners = 1;
+}
+
+message UpdateOwnerResponse {
+  bool updated = 1;
+}
+
+message GetPetTypesResponse {
+  repeated PetType pet_types = 1;
+}
+
+message GetPetResponse {
+  Pet pet = 1;
+  bool found = 2;
+}
+
+message CreatePetResponse {
+  Pet pet = 1;
+  bool created = 2;
+}
+
+message UpdatePetResponse {
+  bool updated = 1;
+}

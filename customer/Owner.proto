@@ -3,85 +3,29 @@ syntax = "proto3";
 package petclinic.customers;
 
 option go_package = "petclinic/grpcgateway/gen/proto/customer";
-option java_package = "org.springframework.samples.petclinic.customers.grpc.generated.owner";
+option java_package = "org.springframework.samples.petclinic.customers.grpc.gen.customer";
 option java_multiple_files = true;
 option java_outer_classname = "OwnerServiceProto";
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
-
-message Owner {
-  int32 id = 1;
-  string first_name = 2;
-  string last_name = 3;
-  string address = 4;
-  string city = 5;
-  string telephone = 6;
-  repeated Pet pets = 7;
-}
-
-message Pet {
-  int32 id = 1;
-  string name = 2;
-  string birth_date = 3;
-  PetType type = 4;
-}
-
-message PetType {
-  int32 id = 1;
-  string name = 2;
-}
-
-message OwnerRequest {
-  string first_name = 1;
-  string last_name = 2;
-  string address = 3;
-  string city = 4;
-  string telephone = 5;
-}
-
-message GetOwnerRequest {
-  int32 owner_id = 1;
-}
-
-message UpdateOwnerRequest {
-  int32 owner_id = 1;
-  OwnerRequest owner = 2;
-}
-
-message OwnerResponse {
-  Owner owner = 1;
-  bool found = 2;
-}
-
-message OwnersListResponse {
-  repeated Owner owners = 1;
-}
-
-message UpdateOwnerResponse {
-  // Empty response indicating success
-}
-
-message ErrorResponse {
-  string message = 1;
-  int32 code = 2;
-}
+import "customer/Types.proto";
 
 service OwnerService {
-  rpc CreateOwner(OwnerRequest) returns (OwnerResponse) {
+  rpc CreateOwner(CreateOwnerRequest) returns (CreateOwnerResponse) {
     option (google.api.http) = {
       post: "/owners"
       body: "*"
     };
   };
 
-  rpc GetOwner(GetOwnerRequest) returns (OwnerResponse) {
+  rpc GetOwner(GetOwnerRequest) returns (GetOwnerResponse) {
     option (google.api.http) = {
       get: "/owners/{owner_id}"
     };
   };
 
-  rpc ListOwners(google.protobuf.Empty) returns (OwnersListResponse) {
+  rpc ListOwners(google.protobuf.Empty) returns (GetOwnersResponse) {
     option (google.api.http) = {
       get: "/owners"
     };
