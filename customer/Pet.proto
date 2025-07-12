@@ -1,0 +1,99 @@
+syntax = "proto3";
+
+package petclinic.customers;
+
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+option java_multiple_files = true;
+option java_package = "org.springframework.samples.petclinic.customers.grpc.gen.pet";
+option java_outer_classname = "PetServiceProto";
+
+message Pet {
+  int32 id = 1;
+  string name = 2;
+  string birth_date = 3;
+  PetType type = 4;
+  Owner owner = 5;
+}
+
+message PetType {
+  int32 id = 1;
+  string name = 2;
+}
+
+message Owner {
+  int32 id = 1;
+  string first_name = 2;
+  string last_name = 3;
+}
+
+message CreatePetRequest {
+  int32 owner_id = 1;
+  PetRequest pet_request = 2;
+}
+
+message PetRequest {
+  int32 id = 1;
+  string birth_date = 2;
+  string name = 3;
+  int32 type_id = 4;
+}
+
+message UpdatePetRequest {
+  int32 pet_id = 1;
+  PetRequest pet_request = 2;
+}
+
+message GetPetRequest {
+  int32 pet_id = 1;
+}
+
+message PetDetailsResponse {
+  int64 id = 1;
+  string name = 2;
+  string owner = 3;
+  string birth_date = 4;
+  PetType type = 5;
+}
+
+message PetTypesResponse {
+  repeated PetType pet_types = 1;
+}
+
+message PetResponse {
+  Pet pet = 1;
+}
+
+message ErrorResponse {
+  string message = 1;
+  int32 code = 2;
+}
+
+service PetService {
+  rpc GetPetTypes(google.protobuf.Empty) returns (PetTypesResponse) {
+    option (google.api.http) = {
+      get: "/petTypes"
+    };
+  }
+
+  rpc CreatePet(CreatePetRequest) returns (PetResponse) {
+    option (google.api.http) = {
+      post: "/owners/{owner_id}/pets"
+      body: "pet_request"
+    };
+  }
+
+  rpc UpdatePet(UpdatePetRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/owners/*/pets/{pet_id}"
+      body: "pet_request"
+    };
+  }
+
+  rpc GetPet(GetPetRequest) returns (PetDetailsResponse) {
+    option (google.api.http) = {
+      get: "/owners/*/pets/{pet_id}"
+    };
+  }
+}

@@ -3,14 +3,13 @@ syntax = "proto3";
 package petclinic.customers;
 
 option go_package = "petclinic/grpcgateway/gen/proto/customer";
-option java_package = "org.springframework.samples.petclinic.customers.grpc.generated";
+option java_package = "org.springframework.samples.petclinic.customers.grpc.generated.owner";
 option java_multiple_files = true;
 option java_outer_classname = "OwnerServiceProto";
 
 import "google/protobuf/empty.proto";
 import "google/api/annotations.proto";
 
-// Owner entity message
 message Owner {
   int32 id = 1;
   string first_name = 2;
@@ -21,21 +20,18 @@ message Owner {
   repeated Pet pets = 7;
 }
 
-// Pet entity message (referenced by Owner)
 message Pet {
   int32 id = 1;
   string name = 2;
-  string birth_date = 3; // Format: yyyy-MM-dd
+  string birth_date = 3;
   PetType type = 4;
 }
 
-// PetType entity message
 message PetType {
   int32 id = 1;
   string name = 2;
 }
 
-// Request message for creating or updating an owner
 message OwnerRequest {
   string first_name = 1;
   string last_name = 2;
@@ -44,43 +40,34 @@ message OwnerRequest {
   string telephone = 5;
 }
 
-// Request message for getting owner by ID
 message GetOwnerRequest {
   int32 owner_id = 1;
 }
 
-// Request message for updating an owner
 message UpdateOwnerRequest {
   int32 owner_id = 1;
   OwnerRequest owner = 2;
 }
 
-// Response message for single owner operations
 message OwnerResponse {
   Owner owner = 1;
-  bool found = 2; // Indicates if owner was found (for optional responses)
+  bool found = 2;
 }
 
-// Response message for listing all owners
 message OwnersListResponse {
   repeated Owner owners = 1;
 }
 
-// Empty response for update operations
 message UpdateOwnerResponse {
   // Empty response indicating success
 }
 
-// Error response message
 message ErrorResponse {
   string message = 1;
   int32 code = 2;
 }
 
-// Owner service definition
 service OwnerService {
-  // Create Owner
-  // Maps to: POST /owners
   rpc CreateOwner(OwnerRequest) returns (OwnerResponse) {
     option (google.api.http) = {
       post: "/owners"
@@ -88,24 +75,18 @@ service OwnerService {
     };
   };
 
-  // Get Owner by ID
-  // Maps to: GET /owners/{ownerId}
   rpc GetOwner(GetOwnerRequest) returns (OwnerResponse) {
     option (google.api.http) = {
       get: "/owners/{owner_id}"
     };
   };
 
-  // List all Owners
-  // Maps to: GET /owners
   rpc ListOwners(google.protobuf.Empty) returns (OwnersListResponse) {
     option (google.api.http) = {
       get: "/owners"
     };
   };
 
-  // Update Owner
-  // Maps to: PUT /owners/{ownerId}
   rpc UpdateOwner(UpdateOwnerRequest) returns (UpdateOwnerResponse) {
     option (google.api.http) = {
       put: "/owners/{owner_id}"
